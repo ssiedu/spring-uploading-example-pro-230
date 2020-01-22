@@ -2,6 +2,10 @@ package com.ssi;
 
 import java.io.IOException;
 import java.sql.Blob;
+import java.util.List;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,45 @@ public class ProductController {
 	
 	@Autowired
 	private ProductService service;
+	
+	@RequestMapping("productlist")
+	public ModelAndView showAllProducts(){
+		List<Product> products=service.getAllProducts();
+		ModelAndView mv=new ModelAndView("plist");
+		mv.addObject("products",products);
+		return mv;
+	}
+	
+	
+	@RequestMapping("loadimage")
+	public void LoadImage(@RequestParam("code") int code, HttpServletResponse response) {
+		Product product=service.search(code);
+		Blob blob=product.getPicture();
+		byte b[]=null;
+		try {
+		b=blob.getBytes(1, (int)blob.length());
+		ServletOutputStream out=response.getOutputStream();
+		out.write(b);
+		out.close();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	@RequestMapping("searchproduct")
+	public ModelAndView searchProductData(@RequestParam("code") int code) {
+		Product product=service.search(code);
+		ModelAndView mv=new ModelAndView("details");
+		mv.addObject("product", product);
+		return mv;
+	}
+	
+	@RequestMapping("searchform")
+	public String showSearchForm() {
+		return "search";
+	}
 	
 	@RequestMapping("saveproduct")
 	public ModelAndView saveProductData(@ModelAttribute("product") Product product, @RequestParam("f1") MultipartFile file ) {

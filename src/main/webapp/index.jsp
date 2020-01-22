@@ -4,7 +4,8 @@
 <hr>
 	<pre>
 	<a href="newproduct">New-Product-Entry</a>
-	<a href="searchproduct">Search-Product</a>
+	<a href="searchform">Search-Product</a>
+	<a href="productlist">View-All-Products</a>
 	<a href="hellolink">Say-Hello</a>
 	</pre>
 <hr>

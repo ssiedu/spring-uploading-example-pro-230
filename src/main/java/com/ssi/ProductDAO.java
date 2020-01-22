@@ -1,5 +1,8 @@
 package com.ssi;
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -11,6 +14,14 @@ public class ProductDAO {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	public List<Product> productList(){
+		Session session=sessionFactory.openSession();
+		Query query=session.createQuery("from Product");
+		List<Product> products=query.list();
+		session.close();
+		return products;
+	}
 	
 	public void saveProduct(Product product) {
 		Session session=sessionFactory.openSession();
